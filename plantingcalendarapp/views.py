@@ -1,7 +1,8 @@
 from django.http import HttpResponse
+
 from plantingcalendarapp.helpers.data_fetcher import PHZmapi, FarmSenseStation
 from plantingcalendarapp.models import *
-from plantingcalendarapp.helpers.calendar_utils import get_dates_from_last_frost
+from plantingcalendarapp.helpers.calendar_utils import get_dates_from_last_frost, create_planting_events_for_grower_calendar
 
 def index(request):
     return HttpResponse("Hello, world. You're at Planting Calendar app.")
@@ -25,7 +26,7 @@ def calendar(request, zip_code):
 
     if fs.last_frost_date:
         zone = USDAHardinessZone.objects.get(zone=phzmapi.zone)
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         grower = Grower.objects.get(username='kayla')
         station_id = int(fs.farmsense_id)
         gc, created = GrowerCalendar.objects.get_or_create(
@@ -37,6 +38,7 @@ def calendar(request, zip_code):
                 usda_hardiness_zone=zone,
             )
         calendar_dates = get_dates_from_last_frost(gc)
+        create_planting_events_for_grower_calendar(gc)
 
     zone_frost = {
         "zip_code": zip_code,

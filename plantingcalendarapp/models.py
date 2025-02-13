@@ -19,7 +19,7 @@ class PlantSpecies(models.Model):
     website =  models.CharField(max_length=1000, default="", null=True)
     needs_cold_stratify = models.BooleanField(default=False)
     needs_indoor_sow = models.BooleanField(default=False)
-
+    can_direct_sow = models.BooleanField(default=False)
     objects = models.Manager()
 
     def __str__(self):
@@ -96,6 +96,10 @@ class GrowerPlant(models.Model):
         blank=True,
         null=True
     )
+
+    class Meta:
+        unique_together = ('grower_calendar', 'plant_species')
+
     objects = models.Manager()
 
 
@@ -106,8 +110,12 @@ class GrowerPlantingEvent(models.Model):
         TRANSPLANT = 'TRANSPLANT', _('Transplant outdoors')
         COLD_STRATIFY = 'COLD_STRATIFY', _('Cold stratify')
 
-    event_code = models.CharField(max_length=200, default="")
-    title = models.CharField(max_length=200, default="")
+    calendar = models.ForeignKey(
+        GrowerCalendar,
+        models.PROTECT,
+        blank=True,
+        null=True
+    )
     event_type = models.CharField(max_length=100, choices=PlantingEventType, default=PlantingEventType.DIRECT_SOW)
     plant = models.ForeignKey(
         GrowerPlant,
@@ -115,6 +123,8 @@ class GrowerPlantingEvent(models.Model):
         blank = True,
         null = True
     )
+    event_code = models.CharField(max_length=200, default="")
+    title = models.CharField(max_length=200, default="")
     description = models.CharField(max_length=1000, default="")
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
@@ -122,3 +132,6 @@ class GrowerPlantingEvent(models.Model):
 
     def __str__(self):
         return f"{self.event_code}"
+
+    class Meta:
+        unique_together = ('plant', 'event_type')
