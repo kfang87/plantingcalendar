@@ -15,17 +15,28 @@ Your USDA Hardiness Zone is {{zone_frost.zone}}
 Your recommendations are based on your nearest USDA station at {{zone_frost.station_name}}
 
 <br/>
-Your estimated last frost in Spring is {{zone_frost.last_frost_date}}
+Your estimated last frost in Spring is {{zone_frost.last_frost_date|date:"M d Y"}}
 
 <br/>
-Your estimated first frost in Autumn is {{zone_frost.first_frost_date}}
+Your estimated first frost in Autumn is {{zone_frost.first_frost_date|date:"M d Y"}}
 
 <br/>
 <br/>
 {% for key, value in zone_frost.frost_calendar_dict.items %}
-    {{key}} weeks from last frost date is {{value}} <br/>
+    {{key}} weeks from last frost date is {{value|date:"M d"}} <br/>
 {% endfor %}
 
+<br/>
+<br/>
+{% for gpe in zone_frost.grower_planting_events %}
+{{gpe.event_type}}
+<a href="{{gpe.plant.plant_species.website}}" target="_blank">
+<b>{{gpe.plant.plant_species.name}}</b>
+(<i>{{gpe.plant.plant_species.binomial}}</i>)
+</a>
+{{gpe.start_datetime|date:"M d"}} to {{gpe.end_datetime|date:"M d"}}
+<br/>
+{% endfor %}
 </body>
 <footer>
     &copy; K.F. Armstrong 2025

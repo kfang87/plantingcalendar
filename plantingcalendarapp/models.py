@@ -1,3 +1,4 @@
+from IPython.core.completerlib import module_completer
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -34,15 +35,15 @@ class PlantSpeciesColdStratify(PlantSpecies):
 
 # Plant Species subtype
 class PlantSpeciesIndoorSow(PlantSpecies):
-    indoor_sow_days_before_last_frost_min = models.IntegerField()
-    indoor_sow_days_before_last_frost_max = models.IntegerField()
+    indoor_sow_weeks_before_last_frost_min = models.IntegerField()
+    indoor_sow_weeks_before_last_frost_max = models.IntegerField()
     objects = models.Manager()
 
 
 
 # Plant Species subtype: Direct sow
 class PlantSpeciesDirectSow(PlantSpecies):
-    sow_days_before_last_frost = models.IntegerField()
+    sow_weeks_before_last_frost = models.IntegerField()
     objects = models.Manager()
 
 
@@ -105,8 +106,8 @@ class GrowerPlant(models.Model):
 
 class GrowerPlantingEvent(models.Model):
     class PlantingEventType(models.TextChoices):
-        INDOOR_SOW = 'INDOOR', _('Indoor sow')
-        DIRECT_SOW = 'DIRECT', _('Direct sow outdoors')
+        INDOOR_SOW = 'INDOOR_SOW', _('Indoor sow')
+        DIRECT_SOW = 'DIRECT_SOW', _('Direct sow outdoors')
         TRANSPLANT = 'TRANSPLANT', _('Transplant outdoors')
         COLD_STRATIFY = 'COLD_STRATIFY', _('Cold stratify')
 
