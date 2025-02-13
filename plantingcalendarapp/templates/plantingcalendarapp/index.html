@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Farm strong @ home</title>
 </head>
 <body>
-$END$
+<header>Welcome to Farm Strong @ Home.  </header>
+<br/>
+<br/>
+You live in zip code {{zone_frost.zip_code}}
+Your USDA Hardiness Zone is {{zone_frost.zone}}
+
+<br/>
+Your recommendations are based on your nearest USDA station at {{zone_frost.station_name}}
+
+<br/>
+Your estimated last frost in Spring is {{zone_frost.last_frost_date}}
+
+<br/>
+Your estimated first frost in Autumn is {{zone_frost.first_frost_date}}
+
+<br/>
+<br/>
+{% for key, value in zone_frost.frost_calendar_dict.items %}
+    {{key}} weeks from last frost date is {{value}} <br/>
+{% endfor %}
+
 </body>
+<footer>
+    &copy; K.F. Armstrong 2025
+</footer>
 </html>
