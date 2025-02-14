@@ -39,6 +39,7 @@ def calendar(request, zip_code):
             )
         calendar_dates = get_dates_from_last_frost(gc)
         grower_planting_events = create_planting_events_for_grower_calendar(gc)
+        grower_plants = GrowerPlant.objects.filter(grower_calendar=gc)
 
     zone_frost = {
         "zip_code": zip_code,
@@ -47,7 +48,8 @@ def calendar(request, zip_code):
         "first_frost_date": fs.first_frost_date,
         "last_frost_date": fs.last_frost_date,
         "frost_calendar_dict": calendar_dates,
-        "grower_planting_events": grower_planting_events
+        "grower_planting_events": grower_planting_events,
+        "grower_plants": grower_plants,
     }
 
     template = loader.get_template("plantingcalendarapp/index.html")

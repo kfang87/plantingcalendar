@@ -78,7 +78,7 @@ class GrowerCalendar(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"{self.grower} {self.station_id} {self.name}"
+        return f"{self.grower} {self.station_id}"
 
     class Meta:
         unique_together = ('grower', 'station_id')
@@ -97,6 +97,9 @@ class GrowerPlant(models.Model):
         blank=True,
         null=True
     )
+
+    def __str__(self):
+        return self.plant_species.name
 
     class Meta:
         unique_together = ('grower_calendar', 'plant_species')
@@ -132,7 +135,7 @@ class GrowerPlantingEvent(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"{self.event_code}"
+        return f"{self.calendar} {self.event_type} {self.plant}"
 
     class Meta:
         unique_together = ('plant', 'event_type')

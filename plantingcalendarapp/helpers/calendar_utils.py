@@ -64,7 +64,7 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
 
             # transplant event for transplant days minus last frost
             transplant_description = f"""
-            {gp.plant_species.name} should be transplanted outside after your last frost date.
+            Your indoor {gp.plant_species.name} should be transplanted outside after your last frost date.
             """
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
@@ -108,7 +108,9 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
             event_list.append(cold_stratify_description)
 
             # transplant event for transplant days minus last frost
-            transplant_description = cold_stratify_description
+            transplant_description = f"""
+            Your cold stratified {gp.plant_species.name} is ready to be transplanted to the ground once the risk of frost as passed.
+"""
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
                 calendar=grower_calendar,

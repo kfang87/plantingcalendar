@@ -26,31 +26,41 @@
                 <br/>
                 Your estimated first frost in Autumn is {{zone_frost.first_frost_date|date:"M d, Y"}}
                 <br/>
-                <br/>
-                <h2>Your personalized planting calendar</h2>
+
+                <h3>Your planting list</h3>
+                <ul>
+                    {% for gp in zone_frost.grower_plants %}
+                    <li>
+                    <a href="{{gp.plant_species.website}}" target="_blank">
+                    <b>{{gp.plant_species.name}}</b>
+                        (<i>{{gp.plant_species.binomial}}</i>)</a></li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Your personalized planting calendar</h3>
                 {% for gpe in zone_frost.grower_planting_events %}
+                <p>
                     {{gpe.get_event_type_display}}
                     <a href="{{gpe.plant.plant_species.website}}" target="_blank">
                     <b>{{gpe.plant.plant_species.name}}</b>
-                    (<i>{{gpe.plant.plant_species.binomial}}</i>)
-                </a>
-                {{gpe.start_datetime|date:"M d"}} to {{gpe.end_datetime|date:"M d"}}
-                <br/>
-                {{gpe.description}}
-                <br/>
-                <br/>
+                    (<i>{{gpe.plant.plant_species.binomial}}</i>)</a>
+                {{gpe.start_datetime|date:"M d"}} to {{gpe.end_datetime|date:"M d"}}.
+                <br/><i>{{gpe.description}}</i></p>
                 {% endfor %}
 
 
                 <br/>
-                <br/>
+
+
                 <h3>Date references</h3>
+                <p class="w3-text-grey">
                 {% for key, value in zone_frost.frost_calendar_dict.items %}
                 {{key}} weeks from last frost date is {{value|date:"M d"}} <br/>
                 {% endfor %}
 
                 <br/>
                 <br/>
+                </p>
             </div>
         </div>
     </section>
@@ -58,7 +68,7 @@
 </body>
 <footer  class="w3-container w3-padding-64 w3-center w3-opacity">
     <p>Your recommendations are based on your nearest USDA station at {{zone_frost.station_name}}</p>
-    <p>&copy; farmstrong@home</p>
+    <p>&copy; 2025 farmstrong@home</p>
 </footer>
 <script>
 // Used to toggle the menu on small screens when clicking on the menu button
