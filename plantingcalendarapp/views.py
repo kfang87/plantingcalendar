@@ -54,12 +54,3 @@ def calendar(request, zip_code):
     context = {"zone_frost": zone_frost}
     return HttpResponse(template.render(context, request))
 
-
-    # return HttpResponse(f"Your planting calendar for zip code {zip_code} "
-    #                     f"with in zone {phzmapi.zone}"
-    #                     f"\n\n\n"
-    #                     f"Your nearest station is in {fs.name}"
-    #                     f"Your last frost date in Spring is {fs.last_frost_date}"
-    #                     f"Your first frost date in Autumn is {fs.first_frost_date}")
-
-

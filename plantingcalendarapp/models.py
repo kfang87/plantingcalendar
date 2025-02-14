@@ -59,13 +59,14 @@ class Grower(models.Model):
         return self.username
 
 class GrowerCalendar(models.Model):
-    name = models.CharField(max_length=1000)
     grower = models.ForeignKey(
         Grower,
         models.PROTECT,
         blank=True,
         null=True
-    )
+    ) #unique together
+    station_id = models.IntegerField() # unique together
+    name = models.CharField(max_length=1000)
     last_frost_date = models.DateTimeField()
     first_frost_date = models.DateTimeField()
     usda_hardiness_zone = models.ForeignKey(
@@ -74,7 +75,6 @@ class GrowerCalendar(models.Model):
         blank=True,
         null=True
     )
-    station_id = models.IntegerField()
     objects = models.Manager()
 
     def __str__(self):
@@ -106,10 +106,10 @@ class GrowerPlant(models.Model):
 
 class GrowerPlantingEvent(models.Model):
     class PlantingEventType(models.TextChoices):
-        INDOOR_SOW = 'INDOOR_SOW', _('Indoor sow')
-        DIRECT_SOW = 'DIRECT_SOW', _('Direct sow outdoors')
-        TRANSPLANT = 'TRANSPLANT', _('Transplant outdoors')
-        COLD_STRATIFY = 'COLD_STRATIFY', _('Cold stratify')
+        INDOOR_SOW = 'INDOOR_SOW', _('🏡 Indoor sow')
+        DIRECT_SOW = 'DIRECT_SOW', _('️️☀️Direct sow outdoors')
+        TRANSPLANT = 'TRANSPLANT', _('🪴Transplant outdoors')
+        COLD_STRATIFY = 'COLD_STRATIFY', _('❄️ Cold stratify')
 
     calendar = models.ForeignKey(
         GrowerCalendar,

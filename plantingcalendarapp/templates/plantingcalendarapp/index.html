@@ -1,44 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Farm strong @ home</title>
+    <title>farmstrong@home</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<header>Welcome to Farm Strong @ Home.  </header>
-<br/>
-<br/>
-You live in zip code {{zone_frost.zip_code}}
-Your USDA Hardiness Zone is {{zone_frost.zone}}
+<div>
 
-<br/>
-Your recommendations are based on your nearest USDA station at {{zone_frost.station_name}}
+    <!-- Header -->
+<header class="w3-container w3-green w3-center" style="padding:12px 16px">
+            <h1 class="w3-margin w3-jumbo">farmstrong@home </h1>
+            <p class="w3-xlarge"> Love home. Love community. Grow stuff.</p>
+</header>
+            <div class="w3-row-padding w3-padding-64 w3-container">
+                Your zip code <b>{{zone_frost.zip_code}}</b> is in USDA Hardiness <b>Zone {{zone_frost.zone}}</b>
 
-<br/>
-Your estimated last frost in Spring is {{zone_frost.last_frost_date|date:"M d Y"}}
+                <br/>
+                Your estimated last frost in Spring is {{zone_frost.last_frost_date|date:"M d, Y"}}
 
-<br/>
-Your estimated first frost in Autumn is {{zone_frost.first_frost_date|date:"M d Y"}}
+                <br/>
+                Your estimated first frost in Autumn is {{zone_frost.first_frost_date|date:"M d, Y"}}
+                <br/>
+                <br/>
+                <h2>Your personalized planting calendar</h2>
+                {% for gpe in zone_frost.grower_planting_events %}
+                    {{gpe.get_event_type_display}}
+                    <a href="{{gpe.plant.plant_species.website}}" target="_blank">
+                    <b>{{gpe.plant.plant_species.name}}</b>
+                    (<i>{{gpe.plant.plant_species.binomial}}</i>)
+                </a>
+                {{gpe.start_datetime|date:"M d"}} to {{gpe.end_datetime|date:"M d"}}
+                <br/>
+                {{gpe.description}}
+                <br/>
+                <br/>
+                {% endfor %}
 
-<br/>
-<br/>
-{% for key, value in zone_frost.frost_calendar_dict.items %}
-    {{key}} weeks from last frost date is {{value|date:"M d"}} <br/>
-{% endfor %}
 
-<br/>
-<br/>
-{% for gpe in zone_frost.grower_planting_events %}
-{{gpe.event_type}}
-<a href="{{gpe.plant.plant_species.website}}" target="_blank">
-<b>{{gpe.plant.plant_species.name}}</b>
-(<i>{{gpe.plant.plant_species.binomial}}</i>)
-</a>
-{{gpe.start_datetime|date:"M d"}} to {{gpe.end_datetime|date:"M d"}}
-<br/>
-{% endfor %}
+                <br/>
+                <br/>
+                <h3>Date references</h3>
+                {% for key, value in zone_frost.frost_calendar_dict.items %}
+                {{key}} weeks from last frost date is {{value|date:"M d"}} <br/>
+                {% endfor %}
+
+                <br/>
+                <br/>
+            </div>
+        </div>
+    </section>
+</div>
 </body>
-<footer>
-    &copy; K.F. Armstrong 2025
+<footer  class="w3-container w3-padding-64 w3-center w3-opacity">
+    <p>Your recommendations are based on your nearest USDA station at {{zone_frost.station_name}}</p>
+    <p>&copy; farmstrong@home</p>
 </footer>
+<script>
+// Used to toggle the menu on small screens when clicking on the menu button
+function myFunction() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+</script>
 </html>

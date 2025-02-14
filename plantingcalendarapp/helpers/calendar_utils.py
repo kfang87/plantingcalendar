@@ -20,7 +20,9 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
         # if direct sow, create direct sow event
         if gp.plant_species.can_direct_sow:
             #sowing event for direct sow days minus last frost
-            description = f"{GrowerPlantingEvent.PlantingEventType.DIRECT_SOW.label} {gp.plant_species}"
+            description = f"""
+            {gp.plant_species.name} can be sown directly outdoors {gp.plant_species.plantspeciesdirectsow.sow_weeks_before_last_frost} weeks before the last frost date.
+"""
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
                 calendar=grower_calendar,
@@ -38,7 +40,10 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
             event_list.append(description)
         elif gp.plant_species.needs_indoor_sow:
             # sowing event for indoor sow days minus transplant
-            indoor_sow_description = f"{GrowerPlantingEvent.PlantingEventType.INDOOR_SOW.label} {gp.plant_species}"
+            indoor_sow_description = f"""
+            {gp.plant_species.name} can be sown indoors {gp.plant_species.plantspeciesindoorsow.indoor_sow_weeks_before_last_frost_min} to {gp.plant_species.plantspeciesindoorsow.indoor_sow_weeks_before_last_frost_max} weeks before the last frost date.
+            This will ensure the growing season is long enough.  
+"""
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
                 calendar=grower_calendar,
@@ -58,7 +63,9 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
             event_list.append(indoor_sow_description)
 
             # transplant event for transplant days minus last frost
-            transplant_description = f"{GrowerPlantingEvent.PlantingEventType.TRANSPLANT.label} {gp.plant_species}"
+            transplant_description = f"""
+            {gp.plant_species.name} should be transplanted outside after your last frost date.
+            """
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
                 calendar=grower_calendar,
@@ -78,7 +85,10 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
         elif gp.plant_species.needs_cold_stratify:
 
             # cold stratify event for cold sow minus transplant
-            cold_stratify_description = f"{GrowerPlantingEvent.PlantingEventType.COLD_STRATIFY.label} {gp.plant_species}"
+            cold_stratify_description = f"""
+            {gp.plant_species.name} needs to have a {gp.plant_species.plantspeciescoldstratify.cold_stratify_days_before_transplant} day period of cold stratification before being transplanted into the ground.
+            This plant can be transplanted {gp.plant_species.plantspeciescoldstratify.transplant_days_before_last_frost} days before the last frost.
+"""
             transplant_date =  grower_calendar.last_frost_date - timedelta(days=gp.plant_species.plantspeciescoldstratify.transplant_days_before_last_frost)
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
@@ -98,7 +108,7 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
             event_list.append(cold_stratify_description)
 
             # transplant event for transplant days minus last frost
-            transplant_description = f"{GrowerPlantingEvent.PlantingEventType.TRANSPLANT.label} {gp.plant_species}"
+            transplant_description = cold_stratify_description
             gpe = GrowerPlantingEvent.objects.update_or_create(
                 # unique together fields
                 calendar=grower_calendar,
@@ -114,4 +124,4 @@ def create_planting_events_for_grower_calendar(grower_calendar: GrowerCalendar) 
                 }
             )
             event_list.append(transplant_description)
-    return GrowerPlantingEvent.objects.filter(calendar=grower_calendar)
+    return GrowerPlantingEvent.objects.filter(calendar=grower_calendar).order_by('start_datetime')
